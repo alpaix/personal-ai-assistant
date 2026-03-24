@@ -1,0 +1,1 @@
+"""BriefBox package."""

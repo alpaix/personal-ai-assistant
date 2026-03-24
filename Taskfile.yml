@@ -1,0 +1,61 @@
+version: "3"
+
+tasks:
+  default:
+    desc: Show available tasks
+    cmds:
+      - task --list
+
+  sync:
+    desc: Install or update project dependencies with uv
+    cmds:
+      - uv sync --all-extras
+
+  lock:
+    desc: Refresh uv.lock
+    cmds:
+      - uv lock
+
+  api:
+    desc: Run the FastAPI app locally
+    cmds:
+      - uv run uvicorn briefbox.app.api:app --reload
+
+  ui:
+    desc: Run the Chainlit UI locally
+    cmds:
+      - uv run chainlit run briefbox/chainlit_app.py
+
+  test:
+    desc: Run the test suite
+    cmds:
+      - uv run pytest
+
+  lint:
+    desc: Run Ruff lint and format checks
+    cmds:
+      - uv run ruff check .
+      - uv run ruff format --check .
+
+  format:
+    desc: Apply Ruff import fixes and formatting
+    cmds:
+      - uv run ruff check . --fix
+      - uv run ruff format .
+
+  health:
+    desc: Smoke-test the FastAPI app in-process
+    cmds:
+      - uv run python -c "from fastapi.testclient import TestClient; from briefbox.app.api import app; response = TestClient(app).get('/health'); print(response.status_code, response.json())"
+
+  fixture:
+    desc: Print the sample fixture summary
+    cmds:
+      - uv run python -c "from briefbox.app.fixtures import summarize_fixture; print(summarize_fixture('valid-fixture').model_dump_json(indent=2))"
+
+  check:
+    desc: Run lint, tests, and the health smoke check
+    cmds:
+      - task: lint
+      - task: test
+      - task: health

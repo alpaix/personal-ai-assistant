@@ -1,0 +1,85 @@
+[project]
+name = "briefbox"
+version = "0.1.0"
+description = "BriefBox demo scaffold"
+readme = "docs/briefbox-dev-setup.md"
+requires-python = ">=3.14"
+dependencies = [
+  "chainlit>=2.4.1,<3",
+  "fastapi>=0.116.0,<1",
+  "httpx>=0.28.0,<1",
+  "pydantic>=2.11.0,<3",
+  "uvicorn>=0.35.0,<1",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.4.0,<9",
+  "ruff>=0.12.0,<1",
+]
+
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["briefbox*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py313"
+
+[tool.ruff.lint]
+# 1. The Essential Rulesets
+select = [
+    "ANN",  # flake8-annotations (Enforce type hints)
+    "ASYNC",# flake8-async (Concurrency bugs)
+    "B",    # flake8-bugbear (Common design flaws)
+    "E",    # pycodestyle errors
+    "F",    # Pyflakes (Logic errors)
+    "I",    # isort (Import sorting)
+    "N",    # PEP-8 naming convention
+    "RUF",  # Ruff-specific rules
+    "S",    # flake8-bandit (Security checks)
+    "SIM",  # flake8-simplify (Code simplification)
+    "T20",  # flake8-print (No print statements in prod!)
+    "UP",   # pyupgrade (Modern Python syntax)
+    "W",    # pycodestyle warnings
+]
+
+# 2. Pragmatic Ignores (Avoid "Linter Exhaustion")
+ignore = [
+    "S101",   # Use of assert (Fine for tests, though you might want this on for prod code)
+]
+
+[tool.ruff.lint.per-file-ignores]
+# Don't enforce strict typing or security rules in tests
+"tests/*" = [
+    "ANN",
+    "PLR2004",
+    "S101",
+    "S108",   # Insecure usage of temp file in tests
+]
+
+[tool.ruff.lint.pep8-naming]
+# Optional: Allow specific names that don't follow conventions (e.g., legacy APIs)
+ignore-names = []
+# Optional: Enforce specific prefixes for class-level decorators
+classmethod-decorators = []
+
+[tool.ruff.lint.flake8-annotations]
+allow-star-arg-any = true
+
+[tool.ruff.lint.isort]
+known-first-party = ["briefbox"] # Helps Ruff distinguish your code from libraries
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"

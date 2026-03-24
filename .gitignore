@@ -1,3 +1,56 @@
+# Bytecode and Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments and local Python version managers
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+# Environment and local config files
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Tool and test caches
+.cache/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.pyre/
+.pytype/
+.nox/
+.tox/
+.hypothesis/
+
+# Coverage and test artifacts
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Packaging/build artifacts
+build/
+dist/
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+*.egg
+*.whl
+
+# IDE/editor and notebook artifacts
 .vscode/
-_agents/
+.idea/
+*.swp
+*.swo
+.ipynb_checkpoints/
+
+# OS-specific files
+.DS_Store
+
+# Project-specific local tooling
 .agents/

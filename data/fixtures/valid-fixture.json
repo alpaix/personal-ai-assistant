@@ -1,0 +1,24 @@
+{
+  "fixture_id": "valid-fixture",
+  "messages": [
+    {
+      "message_id": "msg-001",
+      "sender_name": "Alex",
+      "sender_email": "alex@example.com",
+      "received_at": "2026-03-24T09:00:00Z",
+      "subject": "Approval needed today",
+      "body_text": "Please approve the invoice today.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:unsubscribe@example.com>"
+      }
+    },
+    {
+      "message_id": "msg-002",
+      "sender_email": "travel@example.com",
+      "received_at": "2026-03-24T10:00:00Z",
+      "subject": "Flight reminder",
+      "body_text": "Your flight departs tomorrow.",
+      "headers": {}
+    }
+  ]
+}
