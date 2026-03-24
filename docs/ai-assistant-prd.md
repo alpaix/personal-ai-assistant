@@ -1,6 +1,6 @@
 # Product Requirements Document (PRD)
 
-## Product: Caramail (Working Name)
+## Product: BriefBox (Working Name)
 
 AI-Native Local Email Triage and Management System
 
@@ -8,7 +8,7 @@ AI-Native Local Email Triage and Management System
 
 # 1. Product Overview
 
-Caramail is an **AI-native personal email management system** designed to reduce inbox overload by automatically triaging incoming email into actionable categories and presenting them through a **summary-based feed interface**.
+BriefBox is an **AI-native personal email management system** designed to reduce inbox overload by automatically triaging incoming email into actionable categories and presenting them through a **summary-based feed interface**.
 
 The system processes all email **locally using a self-hosted LLM**, ensuring privacy and full user control.
 
