@@ -30,8 +30,11 @@ class RunStatus(StrEnum):
     PARTIAL = "partial"
 
 
-class HeaderMap(BaseModel):
-    model_config = ConfigDict(extra="allow")
+class AgentStage(StrEnum):
+    CLASSIFY = "classify"
+    SUMMARIZE = "summarize"
+    PRIORITIZE = "prioritize"
+    EXTRACT_ACTIONS = "extract_actions"
 
 
 class FixtureMessage(BaseModel):
@@ -64,6 +67,117 @@ class FallbackTriageResult(BaseModel):
     entities: ExtractedEntities = Field(default_factory=ExtractedEntities)
     unsubscribe_candidate: bool = False
     needs_review: bool = False
+
+
+class TriageStageOutput(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    category: Category | None = None
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    summary: str | None = None
+    entities: ExtractedEntities = Field(default_factory=ExtractedEntities)
+    priority_score: int | None = Field(default=None, ge=0, le=100)
+    score_rationale: str | None = None
+    suggested_lane: Lane | None = None
+    action: str | None = None
+    action_deadline: str | None = None
+    unsubscribe_candidate: bool | None = None
+
+
+class TraceStep(BaseModel):
+    agent_name: AgentStage
+    output: TriageStageOutput
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    latency_ms: int = Field(ge=0)
+    fallback_used: bool = False
+    error: str | None = None
+
+
+class MessageResult(BaseModel):
+    message_id: str
+    sender: str
+    subject: str
+    summary: str
+    entities: ExtractedEntities = Field(default_factory=ExtractedEntities)
+    category: Category
+    final_lane: Lane
+    confidence: float = Field(ge=0.0, le=1.0)
+    priority_score: int = Field(ge=0, le=100)
+    score_rationale: str
+    action: str | None = None
+    action_deadline: str | None = None
+    unsubscribe_candidate: bool = False
+    needs_review: bool = False
+    trace_steps: list[TraceStep] = Field(default_factory=list)
+
+
+class TraceRecord(BaseModel):
+    message_id: str
+    sender: str
+    subject: str
+    agent_steps: list[TraceStep] = Field(default_factory=list)
+    priority_score: int = Field(ge=0, le=100)
+    score_rationale: str
+    final_lane: Lane
+    unsubscribe_recommended: bool = False
+
+
+class RunBoard(BaseModel):
+    do_now: list[MessageResult] = Field(default_factory=list)
+    track: list[MessageResult] = Field(default_factory=list)
+    ignore: list[MessageResult] = Field(default_factory=list)
+
+
+class RunSummaryStats(BaseModel):
+    messages: int = 0
+    lanes: dict[str, int] = Field(default_factory=dict)
+
+
+class RunRequest(BaseModel):
+    fixture_id: str = Field(min_length=1)
+    use_cached_on_timeout: bool = True
+
+
+class RunCreatedResponse(BaseModel):
+    run_id: str
+    status: RunStatus
+
+
+class RunStatusResponse(BaseModel):
+    run_id: str
+    status: RunStatus
+    processed_messages: int = 0
+    total_messages: int = 0
+    current_stage: AgentStage | None = None
+    fallback_used: bool = False
+    errors: list[str] = Field(default_factory=list)
+
+
+class RunResultResponse(BaseModel):
+    run_id: str
+    status: RunStatus
+    fallback_used: bool = False
+    board: RunBoard = Field(default_factory=RunBoard)
+    trace: list[TraceRecord] = Field(default_factory=list)
+    summary_stats: RunSummaryStats = Field(default_factory=RunSummaryStats)
+    errors: list[str] = Field(default_factory=list)
+
+
+class RunRecord(BaseModel):
+    run_id: str
+    status: RunStatus
+    created_at: datetime
+    started_at: datetime | None = None
+    completed_at: datetime | None = None
+    source_fixture_id: str
+    total_messages: int = 0
+    processed_messages: int = 0
+    current_stage: AgentStage | None = None
+    fallback_used: bool = False
+    board: RunBoard = Field(default_factory=RunBoard)
+    trace: list[TraceRecord] = Field(default_factory=list)
+    summary_stats: RunSummaryStats = Field(default_factory=RunSummaryStats)
+    errors: list[str] = Field(default_factory=list)
 
 
 class HealthResponse(BaseModel):

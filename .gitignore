@@ -41,6 +41,7 @@ pip-wheel-metadata/
 .eggs/
 *.egg
 *.whl
+cached-results/
 
 # IDE/editor and notebook artifacts
 .vscode/
