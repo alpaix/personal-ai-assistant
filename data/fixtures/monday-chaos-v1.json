@@ -1,0 +1,519 @@
+{
+  "fixture_id": "monday-chaos-v1",
+  "messages": [
+    {
+      "message_id": "msg-001",
+      "sender_name": "Nina from BoardOps",
+      "sender_email": "nina@boardops.example",
+      "received_at": "2026-03-24T08:01:00Z",
+      "subject": "Approve the board packet by 2026-03-25",
+      "body_text": "Action required. Please review the attached board packet and send approval by 2026-03-25.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-002",
+      "sender_name": "Jordan at Acme Legal",
+      "sender_email": "jordan@acmelegal.example",
+      "received_at": "2026-03-24T08:05:00Z",
+      "subject": "Signature needed for vendor renewal today",
+      "body_text": "Urgent signature needed to keep the renewal on track today.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-003",
+      "sender_name": "Payroll",
+      "sender_email": "payroll@finops.example",
+      "received_at": "2026-03-24T08:10:00Z",
+      "subject": "Verify bank details before payroll cutoff",
+      "body_text": "Please verify your bank details by today so payroll is not delayed.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-004",
+      "sender_name": "Lina from Counsel",
+      "sender_email": "lina@counsel.example",
+      "received_at": "2026-03-24T08:14:00Z",
+      "subject": "Contract review comments needed by Thursday",
+      "body_text": "Review the redlines and reply needed by Thursday.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-005",
+      "sender_name": "Clinic Front Desk",
+      "sender_email": "forms@clinic.example",
+      "received_at": "2026-03-24T08:18:00Z",
+      "subject": "Complete intake forms before appointment",
+      "body_text": "Please complete the intake forms before your appointment tomorrow.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-006",
+      "sender_name": "School Office",
+      "sender_email": "office@school.example",
+      "received_at": "2026-03-24T08:21:00Z",
+      "subject": "Permission slip approval due Friday",
+      "body_text": "Action required: sign the permission slip before Friday.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-007",
+      "sender_name": "Cofounder",
+      "sender_email": "sam@briefbox.example",
+      "received_at": "2026-03-24T08:26:00Z",
+      "subject": "Budget review before investor call",
+      "body_text": "Can you review the updated budget and reply today before the investor meeting?",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-008",
+      "sender_name": "Property Manager",
+      "sender_email": "rentals@oakstreet.example",
+      "received_at": "2026-03-24T08:30:00Z",
+      "subject": "Lease renewal response requested by 2026-03-27",
+      "body_text": "Please confirm by 2026-03-27 whether you want to renew.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-009",
+      "sender_name": "Accountant",
+      "sender_email": "taxes@ledger.example",
+      "received_at": "2026-03-24T08:36:00Z",
+      "subject": "Need missing receipts for filing",
+      "body_text": "Reply needed with the last two receipts before Wednesday so we can complete filing.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-010",
+      "sender_name": "Summit Team",
+      "sender_email": "speakers@summit.example",
+      "received_at": "2026-03-24T08:42:00Z",
+      "subject": "Confirm speaker bio by 2026-04-01",
+      "body_text": "Please review your session draft and confirm by 2026-04-01.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-011",
+      "sender_name": "Recruiter",
+      "sender_email": "jobs@talent.example",
+      "received_at": "2026-03-24T08:47:00Z",
+      "subject": "Interview availability tomorrow",
+      "body_text": "Send your availability tomorrow so we can lock the panel.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-012",
+      "sender_name": "Travel Docs",
+      "sender_email": "docs@travel.example",
+      "received_at": "2026-03-24T08:52:00Z",
+      "subject": "Upload passport copy before trip",
+      "body_text": "Action required: upload the passport scan by Thursday before travel.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-013",
+      "sender_name": "UPS",
+      "sender_email": "tracking@ups.example",
+      "received_at": "2026-03-24T09:01:00Z",
+      "subject": "Tracking update for shipment 1Z204",
+      "body_text": "Your shipment has left the facility. Tracking page updated this morning.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-014",
+      "sender_name": "FedEx",
+      "sender_email": "alerts@fedex.example",
+      "received_at": "2026-03-24T09:05:00Z",
+      "subject": "Out for delivery today",
+      "body_text": "Delivery window updated. Package is out for delivery today.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-015",
+      "sender_name": "Delta",
+      "sender_email": "travel@delta.example",
+      "received_at": "2026-03-24T09:11:00Z",
+      "subject": "Flight itinerary change for tomorrow",
+      "body_text": "Your flight itinerary changed. Review the new travel details before tomorrow.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-016",
+      "sender_name": "Hotel Folio",
+      "sender_email": "reservations@hotel.example",
+      "received_at": "2026-03-24T09:16:00Z",
+      "subject": "Hotel reservation confirmed",
+      "body_text": "Reservation confirmed for next week. Review hotel details and check-in policy.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-017",
+      "sender_name": "Dental Center",
+      "sender_email": "appointments@dental.example",
+      "received_at": "2026-03-24T09:21:00Z",
+      "subject": "Appointment reminder for Wednesday",
+      "body_text": "Your appointment is scheduled for Wednesday at 11am.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-018",
+      "sender_name": "Calendar",
+      "sender_email": "calendar@briefbox.example",
+      "received_at": "2026-03-24T09:24:00Z",
+      "subject": "Offsite meeting moved to Thursday",
+      "body_text": "The offsite meeting is now scheduled for Thursday afternoon.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-019",
+      "sender_name": "Expo Events",
+      "sender_email": "tickets@expo.example",
+      "received_at": "2026-03-24T09:28:00Z",
+      "subject": "Conference ticket receipt",
+      "body_text": "Receipt for your conference ticket purchase. Keep this for later.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-020",
+      "sender_name": "Webinar Team",
+      "sender_email": "events@webinar.example",
+      "received_at": "2026-03-24T09:33:00Z",
+      "subject": "Webinar starts tomorrow",
+      "body_text": "Reminder: the webinar begins tomorrow. Save your join link.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-021",
+      "sender_name": "Amtrak",
+      "sender_email": "travel@rail.example",
+      "received_at": "2026-03-24T09:37:00Z",
+      "subject": "Train ticket available in your account",
+      "body_text": "Your travel ticket is ready. Review departure details before check-in.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-022",
+      "sender_name": "Car Service",
+      "sender_email": "dispatch@cars.example",
+      "received_at": "2026-03-24T09:40:00Z",
+      "subject": "Airport pickup scheduled",
+      "body_text": "Car service scheduled for Monday at 6:30am.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-023",
+      "sender_name": "Shop Carrier",
+      "sender_email": "notify@carrier.example",
+      "received_at": "2026-03-24T09:46:00Z",
+      "subject": "Delivery delayed due to weather",
+      "body_text": "Tracking note: delivery delayed until tomorrow.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-024",
+      "sender_name": "Finance Platform",
+      "sender_email": "receipts@billing.example",
+      "received_at": "2026-03-24T09:52:00Z",
+      "subject": "Renewal receipt processed",
+      "body_text": "Your renewal receipt has been processed successfully.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-025",
+      "sender_name": "Visa Center",
+      "sender_email": "appointments@visa.example",
+      "received_at": "2026-03-24T09:56:00Z",
+      "subject": "Visa appointment confirmed",
+      "body_text": "Appointment confirmed for 2026-03-29. Bring the printed confirmation.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-026",
+      "sender_name": "Airline",
+      "sender_email": "checkin@air.example",
+      "received_at": "2026-03-24T10:01:00Z",
+      "subject": "Check-in opens in 24 hours",
+      "body_text": "Your flight check-in opens tomorrow. Travel details are ready.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-027",
+      "sender_name": "Meetup",
+      "sender_email": "community@meetup.example",
+      "received_at": "2026-03-24T10:07:00Z",
+      "subject": "Your meetup RSVP is confirmed",
+      "body_text": "Meetup details are available. Event doors open at 6pm.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-028",
+      "sender_name": "Payment Processor",
+      "sender_email": "billing@processor.example",
+      "received_at": "2026-03-24T10:11:00Z",
+      "subject": "Invoice receipt available",
+      "body_text": "Receipt for invoice INV-2048 is now available in your dashboard.",
+      "headers": {}
+    },
+    {
+      "message_id": "msg-029",
+      "sender_name": "Retail Planet",
+      "sender_email": "deals@retailplanet.example",
+      "received_at": "2026-03-24T10:16:00Z",
+      "subject": "Limited time sale ends tonight",
+      "body_text": "Big discount on office gear. Shop now before tonight.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:unsubscribe@retailplanet.example>"
+      }
+    },
+    {
+      "message_id": "msg-030",
+      "sender_name": "Founder Weekly",
+      "sender_email": "newsletter@founderweekly.example",
+      "received_at": "2026-03-24T10:20:00Z",
+      "subject": "Newsletter: 12 ideas for B2B pricing",
+      "body_text": "Weekly newsletter with essays and links from around the web.",
+      "headers": {
+        "List-Unsubscribe": "<https://founderweekly.example/unsubscribe>"
+      }
+    },
+    {
+      "message_id": "msg-031",
+      "sender_name": "Shop Smart",
+      "sender_email": "promo@shopsmart.example",
+      "received_at": "2026-03-24T10:24:00Z",
+      "subject": "Coupon inside: 20% off today",
+      "body_text": "Use this coupon today for a discount on home office accessories.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:leave@shopsmart.example>"
+      }
+    },
+    {
+      "message_id": "msg-032",
+      "sender_name": "SaaS Digest",
+      "sender_email": "digest@saasdigest.example",
+      "received_at": "2026-03-24T10:29:00Z",
+      "subject": "Digest: product launches you missed",
+      "body_text": "A digest of new launches and sponsor offers from this week.",
+      "headers": {
+        "List-Unsubscribe": "<https://saasdigest.example/unsub>"
+      }
+    },
+    {
+      "message_id": "msg-033",
+      "sender_name": "Mega Mart",
+      "sender_email": "promo@megamart.example",
+      "received_at": "2026-03-24T10:33:00Z",
+      "subject": "Black Friday preview starts early",
+      "body_text": "Preview this week's sale and get a discount code.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:unsubscribe@megamart.example>"
+      }
+    },
+    {
+      "message_id": "msg-034",
+      "sender_name": "VC Reads",
+      "sender_email": "briefing@vcreads.example",
+      "received_at": "2026-03-24T10:38:00Z",
+      "subject": "Monday digest for operators",
+      "body_text": "Newsletter digest with long reads, podcasts, and sponsor blurbs.",
+      "headers": {
+        "List-Unsubscribe": "<https://vcreads.example/u>"
+      }
+    },
+    {
+      "message_id": "msg-035",
+      "sender_name": "Cloud Gear",
+      "sender_email": "sales@cloudgear.example",
+      "received_at": "2026-03-24T10:42:00Z",
+      "subject": "Promotion: storage plans on sale",
+      "body_text": "Limited time promotion for storage plans. Shop now.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:optout@cloudgear.example>"
+      }
+    },
+    {
+      "message_id": "msg-036",
+      "sender_name": "Creator Notes",
+      "sender_email": "newsletter@creatornotes.example",
+      "received_at": "2026-03-24T10:46:00Z",
+      "subject": "Newsletter: creator tools roundup",
+      "body_text": "This newsletter covers creator tools, sponsor deals, and trends.",
+      "headers": {
+        "List-Unsubscribe": "<https://creatornotes.example/unsubscribe>"
+      }
+    },
+    {
+      "message_id": "msg-037",
+      "sender_name": "Office Outlet",
+      "sender_email": "deals@officeoutlet.example",
+      "received_at": "2026-03-24T10:50:00Z",
+      "subject": "Deal alert for desks and chairs",
+      "body_text": "A new deal alert with coupon savings on desks and chairs.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:unsubscribe@officeoutlet.example>"
+      }
+    },
+    {
+      "message_id": "msg-038",
+      "sender_name": "Growth Notes",
+      "sender_email": "digest@growthnotes.example",
+      "received_at": "2026-03-24T10:55:00Z",
+      "subject": "Weekly growth digest",
+      "body_text": "A weekly digest with marketing case studies and sponsor content.",
+      "headers": {
+        "List-Unsubscribe": "<https://growthnotes.example/unsub>"
+      }
+    },
+    {
+      "message_id": "msg-039",
+      "sender_name": "Beauty Box",
+      "sender_email": "promo@beautybox.example",
+      "received_at": "2026-03-24T11:00:00Z",
+      "subject": "Limited time promo bundle",
+      "body_text": "Promotion for a bundle discount. Shop now while inventory lasts.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:unsubscribe@beautybox.example>"
+      }
+    },
+    {
+      "message_id": "msg-040",
+      "sender_name": "Dev Tools Weekly",
+      "sender_email": "newsletter@devtoolsweekly.example",
+      "received_at": "2026-03-24T11:06:00Z",
+      "subject": "Newsletter: dev tools and sponsor links",
+      "body_text": "Weekly newsletter covering new releases and sponsor offers.",
+      "headers": {
+        "List-Unsubscribe": "<https://devtoolsweekly.example/unsub>"
+      }
+    },
+    {
+      "message_id": "msg-041",
+      "sender_name": "Market Place",
+      "sender_email": "offers@marketplace.example",
+      "received_at": "2026-03-24T11:09:00Z",
+      "subject": "Special offer ends tomorrow",
+      "body_text": "Discount on software subscriptions and a bonus coupon.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:leave@marketplace.example>"
+      }
+    },
+    {
+      "message_id": "msg-042",
+      "sender_name": "Creator Economy",
+      "sender_email": "digest@creatoreconomy.example",
+      "received_at": "2026-03-24T11:13:00Z",
+      "subject": "Newsletter digest: creator economy charts",
+      "body_text": "Digest issue with essays, charts, and sponsor blurbs.",
+      "headers": {
+        "List-Unsubscribe": "<https://creatoreconomy.example/unsubscribe>"
+      }
+    },
+    {
+      "message_id": "msg-043",
+      "sender_name": "Kitchen Hub",
+      "sender_email": "deals@kitchenhub.example",
+      "received_at": "2026-03-24T11:19:00Z",
+      "subject": "Deal of the day for cookware",
+      "body_text": "One-day discount with free shipping and a coupon.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:unsubscribe@kitchenhub.example>"
+      }
+    },
+    {
+      "message_id": "msg-044",
+      "sender_name": "Infra Digest",
+      "sender_email": "newsletter@infradigest.example",
+      "received_at": "2026-03-24T11:23:00Z",
+      "subject": "Infra digest issue 184",
+      "body_text": "Digest of articles, launches, and sponsor reads for infra teams.",
+      "headers": {
+        "List-Unsubscribe": "<https://infradigest.example/u>"
+      }
+    },
+    {
+      "message_id": "msg-045",
+      "sender_name": "Travel Deals",
+      "sender_email": "promo@traveldeals.example",
+      "received_at": "2026-03-24T11:27:00Z",
+      "subject": "Flash sale on weekend travel",
+      "body_text": "Promotion with a travel discount and hotel coupon.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:unsubscribe@traveldeals.example>"
+      }
+    },
+    {
+      "message_id": "msg-046",
+      "sender_name": "Product Hunt Roundup",
+      "sender_email": "digest@roundup.example",
+      "received_at": "2026-03-24T11:32:00Z",
+      "subject": "Product roundup newsletter",
+      "body_text": "A newsletter digest of launches and sponsor promotions.",
+      "headers": {
+        "List-Unsubscribe": "<https://roundup.example/unsub>"
+      }
+    },
+    {
+      "message_id": "msg-047",
+      "sender_name": "Office Snacks",
+      "sender_email": "sales@officesnacks.example",
+      "received_at": "2026-03-24T11:37:00Z",
+      "subject": "Coupon for snack boxes",
+      "body_text": "Today only coupon and discount on snack subscriptions.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:optout@officesnacks.example>"
+      }
+    },
+    {
+      "message_id": "msg-048",
+      "sender_name": "AI Notes",
+      "sender_email": "newsletter@ainotes.example",
+      "received_at": "2026-03-24T11:41:00Z",
+      "subject": "Newsletter: AI papers and tools",
+      "body_text": "Weekly newsletter covering papers, tools, and sponsor spots.",
+      "headers": {
+        "List-Unsubscribe": "<https://ainotes.example/unsubscribe>"
+      }
+    },
+    {
+      "message_id": "msg-049",
+      "sender_name": "Furniture World",
+      "sender_email": "promo@furnitureworld.example",
+      "received_at": "2026-03-24T11:46:00Z",
+      "subject": "Weekend sale on office storage",
+      "body_text": "Promotion with a limited time sale and checkout coupon.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:unsubscribe@furnitureworld.example>"
+      }
+    },
+    {
+      "message_id": "msg-050",
+      "sender_name": "Community Sync",
+      "sender_email": "newsletter@communitysync.example",
+      "received_at": "2026-03-24T11:50:00Z",
+      "subject": "Community newsletter and sponsor bundle",
+      "body_text": "Digest issue with community links, sponsor codes, and offers.",
+      "headers": {
+        "List-Unsubscribe": "<https://communitysync.example/unsub>"
+      }
+    },
+    {
+      "message_id": "msg-051",
+      "sender_name": "Deals Radar",
+      "sender_email": "alerts@dealsradar.example",
+      "received_at": "2026-03-24T11:56:00Z",
+      "subject": "Promo bundle for founders",
+      "body_text": "Shop now for a discount bundle and limited time founder offer.",
+      "headers": {
+        "List-Unsubscribe": "<mailto:bye@dealsradar.example>"
+      }
+    },
+    {
+      "message_id": "msg-052",
+      "sender_name": "Unknown",
+      "sender_email": "noise@odd.example",
+      "received_at": "2026-03-24T12:00:00Z",
+      "subject": "Re: fwd // ???",
+      "body_text": "pinging this thread with misc context and no clear ask or signal",
+      "headers": {}
+    }
+  ]
+}

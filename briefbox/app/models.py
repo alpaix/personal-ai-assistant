@@ -49,6 +49,23 @@ class FixtureDocument(BaseModel):
     messages: list[FixtureMessage] = Field(min_length=1)
 
 
+class ExtractedEntities(BaseModel):
+    deadlines: list[str] = Field(default_factory=list)
+    events: list[str] = Field(default_factory=list)
+    shipments: list[str] = Field(default_factory=list)
+
+
+class FallbackTriageResult(BaseModel):
+    message_id: str
+    category: Category
+    lane: Lane
+    confidence: float = Field(ge=0.0, le=1.0)
+    summary: str = Field(min_length=1)
+    entities: ExtractedEntities = Field(default_factory=ExtractedEntities)
+    unsubscribe_candidate: bool = False
+    needs_review: bool = False
+
+
 class HealthResponse(BaseModel):
     ok: bool = True
     service: str = "briefbox-api"
