@@ -67,7 +67,20 @@ def test_create_triage_run_rejects_duplicate_active_fixture() -> None:
     assert response.status_code == 409
 
 
+def test_create_triage_run_rejects_missing_fixture() -> None:
+    response = client.post("/triage/run", json={"fixture_id": "missing-fixture"})
+
+    assert response.status_code == 404
+    assert "was not found" in response.json()["detail"]
+
+
 def test_missing_run_returns_404() -> None:
     response = client.get("/triage/result/run_missing")
+
+    assert response.status_code == 404
+
+
+def test_missing_status_run_returns_404() -> None:
+    response = client.get("/triage/status/run_missing")
 
     assert response.status_code == 404

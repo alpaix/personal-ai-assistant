@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException
 
-from briefbox.app.fixtures import FixtureError, summarize_fixture
+from briefbox.app.fixtures import FixtureError, load_fixture, summarize_fixture
 from briefbox.app.models import (
     FixtureSummary,
     HealthResponse,
@@ -40,6 +40,11 @@ def create_app(
         payload: RunRequest,
         background_tasks: BackgroundTasks,
     ) -> RunCreatedResponse:
+        try:
+            load_fixture(payload.fixture_id)
+        except FixtureError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+
         try:
             run = app.state.store.create_run(payload.fixture_id)
         except DuplicateRunError as exc:
