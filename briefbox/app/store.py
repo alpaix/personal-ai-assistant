@@ -8,6 +8,9 @@ from uuid import uuid4
 from briefbox.app.fixtures import project_root
 from briefbox.app.models import (
     AgentStage,
+    MessageAction,
+    MessageActionResponse,
+    MessageResult,
     RunBoard,
     RunRecord,
     RunResultResponse,
@@ -15,6 +18,8 @@ from briefbox.app.models import (
     RunStatusResponse,
     RunSummaryStats,
     TraceRecord,
+    UnsubscribeMethod,
+    UnsubscribeStatus,
 )
 
 
@@ -24,6 +29,10 @@ class DuplicateRunError(RuntimeError):
 
 class RunNotFoundError(KeyError):
     """Raised when a run id cannot be resolved."""
+
+
+class MessageNotFoundError(KeyError):
+    """Raised when a run does not contain the requested message."""
 
 
 class InMemoryRunStore:
@@ -137,7 +146,59 @@ class InMemoryRunStore:
             errors=record.errors,
         )
 
+    def apply_message_action(
+        self,
+        run_id: str,
+        *,
+        message_id: str,
+        action: MessageAction,
+    ) -> MessageActionResponse:
+        message = self._find_message(run_id, message_id)
+        updated = False
+        if action == MessageAction.ARCHIVE and not message.archived:
+            message.archived = True
+            updated = True
+        elif action == MessageAction.PIN and not message.pinned:
+            message.pinned = True
+            updated = True
+        elif action == MessageAction.SNOOZE and not message.snoozed:
+            message.snoozed = True
+            updated = True
+        return MessageActionResponse(
+            run_id=run_id,
+            message_id=message_id,
+            action=action,
+            updated=updated,
+            message=message,
+        )
+
+    def update_unsubscribe_result(
+        self,
+        run_id: str,
+        *,
+        message_id: str,
+        method: UnsubscribeMethod,
+        status: UnsubscribeStatus,
+        user_message: str,
+    ) -> MessageResult:
+        message = self._find_message(run_id, message_id)
+        message.unsubscribe_method = method
+        message.unsubscribe_status = status
+        message.unsubscribe_message = user_message
+        return message
+
+    def get_message(self, run_id: str, message_id: str) -> MessageResult:
+        return self._find_message(run_id, message_id)
+
     def _persist_snapshot(self, record: RunRecord) -> None:
         self.snapshot_dir.mkdir(parents=True, exist_ok=True)
         path = self.snapshot_dir / f"{record.run_id}.json"
         path.write_text(json.dumps(record.model_dump(mode="json"), indent=2, default=str))
+
+    def _find_message(self, run_id: str, message_id: str) -> MessageResult:
+        record = self.get_run(run_id)
+        for bucket in (record.board.do_now, record.board.track, record.board.ignore):
+            for message in bucket:
+                if message.message_id == message_id:
+                    return message
+        raise MessageNotFoundError(message_id)

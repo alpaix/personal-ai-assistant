@@ -1,5 +1,7 @@
+import httpx
 from fastapi.testclient import TestClient
 
+from briefbox.app.actions import UnsubscribeExecutor
 from briefbox.app.api import create_app
 from briefbox.app.models import AgentStage, Category, ExtractedEntities, Lane, TriageStageOutput
 from briefbox.app.ollama_client import StageResult
@@ -84,3 +86,42 @@ def test_missing_status_run_returns_404() -> None:
     response = client.get("/triage/status/run_missing")
 
     assert response.status_code == 404
+
+
+def test_message_action_endpoint_updates_message_state() -> None:
+    run_response = client.post("/triage/run", json={"fixture_id": "valid-fixture"})
+    run_id = run_response.json()["run_id"]
+
+    response = client.post(
+        "/actions/message",
+        json={"run_id": run_id, "message_id": "msg-001", "action": "pin"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["updated"] is True
+    assert response.json()["message"]["pinned"] is True
+
+
+def test_unsubscribe_endpoint_updates_message_state() -> None:
+    def handler(request: httpx.Request) -> httpx.Response:
+        return httpx.Response(status_code=200, request=request)
+
+    local_store = InMemoryRunStore()
+    local_app = create_app(
+        store=local_store,
+        unsubscribe_executor=UnsubscribeExecutor(http_client=httpx.Client(transport=httpx.MockTransport(handler))),
+    )
+    local_app.state.orchestrator.model_client = FakeModelClient()
+    local_client = TestClient(local_app)
+
+    run_response = local_client.post("/triage/run", json={"fixture_id": "monday-chaos-v1"})
+    run_id = run_response.json()["run_id"]
+
+    response = local_client.post(
+        "/actions/unsubscribe",
+        json={"run_id": run_id, "message_id": "msg-030"},
+    )
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "succeeded"
+    assert response.json()["message"]["unsubscribe_status"] == "succeeded"

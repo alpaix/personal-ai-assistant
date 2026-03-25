@@ -37,6 +37,24 @@ class AgentStage(StrEnum):
     EXTRACT_ACTIONS = "extract_actions"
 
 
+class MessageAction(StrEnum):
+    ARCHIVE = "archive"
+    PIN = "pin"
+    SNOOZE = "snooze"
+
+
+class UnsubscribeMethod(StrEnum):
+    MAILTO = "mailto"
+    HTTP = "http"
+    NONE = "none"
+
+
+class UnsubscribeStatus(StrEnum):
+    SUCCEEDED = "succeeded"
+    FAILED = "failed"
+    UNSUPPORTED = "unsupported"
+
+
 class FixtureMessage(BaseModel):
     message_id: str = Field(min_length=1)
     sender_name: str | None = None
@@ -107,6 +125,12 @@ class MessageResult(BaseModel):
     action: str | None = None
     action_deadline: str | None = None
     unsubscribe_candidate: bool = False
+    archived: bool = False
+    pinned: bool = False
+    snoozed: bool = False
+    unsubscribe_status: UnsubscribeStatus | None = None
+    unsubscribe_method: UnsubscribeMethod = UnsubscribeMethod.NONE
+    unsubscribe_message: str | None = None
     needs_review: bool = False
     trace_steps: list[TraceStep] = Field(default_factory=list)
 
@@ -143,6 +167,20 @@ class RunCreatedResponse(BaseModel):
     status: RunStatus
 
 
+class MessageActionRequest(BaseModel):
+    run_id: str = Field(min_length=1)
+    message_id: str = Field(min_length=1)
+    action: MessageAction
+
+
+class MessageActionResponse(BaseModel):
+    run_id: str
+    message_id: str
+    action: MessageAction
+    updated: bool
+    message: MessageResult
+
+
 class RunStatusResponse(BaseModel):
     run_id: str
     status: RunStatus
@@ -161,6 +199,21 @@ class RunResultResponse(BaseModel):
     trace: list[TraceRecord] = Field(default_factory=list)
     summary_stats: RunSummaryStats = Field(default_factory=RunSummaryStats)
     errors: list[str] = Field(default_factory=list)
+
+
+class UnsubscribeRequest(BaseModel):
+    run_id: str = Field(min_length=1)
+    message_id: str = Field(min_length=1)
+
+
+class UnsubscribeResponse(BaseModel):
+    run_id: str
+    message_id: str
+    performed: bool
+    method: UnsubscribeMethod
+    status: UnsubscribeStatus
+    user_message: str
+    message: MessageResult
 
 
 class RunRecord(BaseModel):

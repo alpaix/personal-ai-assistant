@@ -2,27 +2,39 @@ from __future__ import annotations
 
 from fastapi import BackgroundTasks, FastAPI, HTTPException
 
+from briefbox.app.actions import UnsubscribeExecutor
 from briefbox.app.fixtures import FixtureError, load_fixture, summarize_fixture
 from briefbox.app.models import (
     FixtureSummary,
     HealthResponse,
+    MessageActionRequest,
+    MessageActionResponse,
     RunCreatedResponse,
     RunRequest,
     RunResultResponse,
     RunStatusResponse,
+    UnsubscribeRequest,
+    UnsubscribeResponse,
 )
 from briefbox.app.orchestrator import TriageOrchestrator
-from briefbox.app.store import DuplicateRunError, InMemoryRunStore, RunNotFoundError
+from briefbox.app.store import (
+    DuplicateRunError,
+    InMemoryRunStore,
+    MessageNotFoundError,
+    RunNotFoundError,
+)
 
 
 def create_app(
     *,
     store: InMemoryRunStore | None = None,
     orchestrator: TriageOrchestrator | None = None,
+    unsubscribe_executor: UnsubscribeExecutor | None = None,
 ) -> FastAPI:
     app = FastAPI(title="BriefBox Demo API", version="0.1.0")
     app.state.store = store or InMemoryRunStore()
     app.state.orchestrator = orchestrator or TriageOrchestrator(store=app.state.store)
+    app.state.unsubscribe_executor = unsubscribe_executor or UnsubscribeExecutor()
 
     @app.get("/health", response_model=HealthResponse)
     def health() -> HealthResponse:
@@ -70,6 +82,57 @@ def create_app(
             return app.state.store.get_result(run_id)
         except RunNotFoundError as exc:
             raise HTTPException(status_code=404, detail=f"Run '{run_id}' was not found") from exc
+
+    @app.post("/actions/message", response_model=MessageActionResponse)
+    def post_message_action(payload: MessageActionRequest) -> MessageActionResponse:
+        try:
+            return app.state.store.apply_message_action(
+                payload.run_id,
+                message_id=payload.message_id,
+                action=payload.action,
+            )
+        except RunNotFoundError as exc:
+            raise HTTPException(status_code=404, detail=f"Run '{payload.run_id}' was not found") from exc
+        except MessageNotFoundError as exc:
+            raise HTTPException(status_code=404, detail=f"Message '{payload.message_id}' was not found") from exc
+
+    @app.post("/actions/unsubscribe", response_model=UnsubscribeResponse)
+    def post_unsubscribe(payload: UnsubscribeRequest) -> UnsubscribeResponse:
+        try:
+            message = app.state.store.get_message(payload.run_id, payload.message_id)
+            fixture = load_fixture(app.state.store.get_run(payload.run_id).source_fixture_id)
+        except RunNotFoundError as exc:
+            raise HTTPException(status_code=404, detail=f"Run '{payload.run_id}' was not found") from exc
+        except MessageNotFoundError as exc:
+            raise HTTPException(status_code=404, detail=f"Message '{payload.message_id}' was not found") from exc
+        except FixtureError as exc:
+            raise HTTPException(status_code=500, detail=str(exc)) from exc
+
+        raw_message = next((item for item in fixture.messages if item.message_id == payload.message_id), None)
+        if raw_message is None:
+            raise HTTPException(status_code=404, detail=f"Message '{payload.message_id}' was not found")
+
+        result = app.state.unsubscribe_executor.execute(
+            run_id=payload.run_id,
+            message=message,
+            raw_headers={key: str(value) for key, value in raw_message.headers.items()},
+        )
+        updated_message = app.state.store.update_unsubscribe_result(
+            payload.run_id,
+            message_id=payload.message_id,
+            method=result.method,
+            status=result.status,
+            user_message=result.user_message,
+        )
+        return UnsubscribeResponse(
+            run_id=payload.run_id,
+            message_id=payload.message_id,
+            performed=result.performed,
+            method=result.method,
+            status=result.status,
+            user_message=result.user_message,
+            message=updated_message,
+        )
 
     return app
 
