@@ -24,7 +24,7 @@ tasks:
   ui:
     desc: Run the Chainlit UI locally
     cmds:
-      - uv run chainlit run briefbox/chainlit_app.py
+      - uv run chainlit run briefbox/chainlit_app.py --port 8001 --headless
 
   test:
     desc: Run the test suite

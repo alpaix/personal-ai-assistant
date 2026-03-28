@@ -2,7 +2,7 @@
 
 ## Local Requirements
 
-- Python 3.13+
+- Python 3.13.x
 - `uv`
 - Ollama installed locally
 - A local Ollama model available for later milestones
@@ -10,13 +10,14 @@
 ## Install And Sync
 
 ```bash
-UV_CACHE_DIR=.cache/uv uv sync --extra dev
+uv venv --python 3.13.9
+uv sync --group dev
 ```
 
 ## Run The API
 
 ```bash
-UV_CACHE_DIR=.cache/uv uv run uvicorn briefbox.app.api:app --reload
+uv run uvicorn briefbox.app.api:app --reload
 ```
 
 API health check:
@@ -28,20 +29,25 @@ curl http://127.0.0.1:8000/health
 ## Run The Chainlit UI
 
 ```bash
-UV_CACHE_DIR=.cache/uv uv run chainlit run briefbox/chainlit_app.py
+uv run chainlit run briefbox/chainlit_app.py --port 8001
 ```
+
+The local setup uses two processes:
+
+- FastAPI backend on `http://127.0.0.1:8000`
+- Chainlit UI on `http://127.0.0.1:8001`
 
 ## Run Tests
 
 ```bash
-UV_CACHE_DIR=.cache/uv uv run --extra dev pytest
+uv run --extra dev pytest
 ```
 
 ## Run Lint
 
 ```bash
-UV_CACHE_DIR=.cache/uv uv run --extra dev ruff check .
-UV_CACHE_DIR=.cache/uv uv run --extra dev ruff format --check .
+uv run --extra dev ruff check .
+uv run --extra dev ruff format --check .
 ```
 
 ## Task Shortcuts
