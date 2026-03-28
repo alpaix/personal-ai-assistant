@@ -51,6 +51,22 @@ class TriageOrchestrator:
             return
 
         self.store.start_run(run_id, total_messages=len(fixture.messages))
+
+        availability_error = self._check_model_availability(use_cached_on_timeout=use_cached_on_timeout)
+        if availability_error:
+            fallback_used = True
+            errors.append(availability_error)
+            results, trace_records = self._triage_fixture_with_fallback(run_id, fixture.messages, availability_error)
+            self._finalize_results(
+                run_id,
+                results=results,
+                trace_records=trace_records,
+                fallback_used=fallback_used,
+                errors=errors,
+                status=RunStatus.COMPLETED,
+            )
+            return
+
         results: list[MessageResult] = []
         trace_records: list[TraceRecord] = []
 
@@ -75,6 +91,25 @@ class TriageOrchestrator:
                     errors=errors,
                 )
 
+        self._finalize_results(
+            run_id,
+            results=results,
+            trace_records=trace_records,
+            fallback_used=fallback_used,
+            errors=errors,
+            status=RunStatus.COMPLETED,
+        )
+
+    def _finalize_results(
+        self,
+        run_id: str,
+        *,
+        results: list[MessageResult],
+        trace_records: list[TraceRecord],
+        fallback_used: bool,
+        errors: list[str],
+        status: RunStatus,
+    ) -> None:
         board = self._build_board(results)
         summary_stats = RunSummaryStats(
             messages=len(results),
@@ -84,16 +119,49 @@ class TriageOrchestrator:
                 "ignore": len(board.ignore),
             },
         )
-        final_status = RunStatus.PARTIAL if errors else RunStatus.COMPLETED
         self.store.finalize_run(
             run_id,
-            status=final_status,
+            status=status,
             board=board,
             trace=trace_records,
             summary_stats=summary_stats,
             fallback_used=fallback_used,
             errors=errors,
         )
+
+    def _check_model_availability(self, *, use_cached_on_timeout: bool) -> str | None:
+        if not use_cached_on_timeout:
+            return None
+        check_model_availability = getattr(self.model_client, "check_model_availability", None)
+        if not callable(check_model_availability):
+            return None
+        return check_model_availability()
+
+    def _triage_fixture_with_fallback(
+        self,
+        run_id: str,
+        messages: list[FixtureMessage],
+        availability_error: str,
+    ) -> tuple[list[MessageResult], list[TraceRecord]]:
+        results: list[MessageResult] = []
+        trace_records: list[TraceRecord] = []
+
+        for index, message in enumerate(messages, start=1):
+            message_result, trace_record = self._triage_message_with_fallback(
+                message,
+                availability_error=availability_error,
+            )
+            results.append(message_result)
+            trace_records.append(trace_record)
+            self.store.update_progress(
+                run_id,
+                processed_messages=index,
+                current_stage=None,
+                fallback_used=True,
+                errors=[availability_error],
+            )
+
+        return results, trace_records
 
     def _triage_message(
         self,
@@ -104,7 +172,7 @@ class TriageOrchestrator:
         fallback = triage_message(message)
         stage_outputs: dict[AgentStage, TriageStageOutput] = {}
         trace_steps: list[TraceStep] = []
-        errors: list[str] = []
+        stage_errors: list[str] = []
         fallback_used = False
 
         for stage in AgentStage:
@@ -121,10 +189,7 @@ class TriageOrchestrator:
                 )
             except (ModelTimeoutError, ModelResponseError) as exc:
                 fallback_used = True
-                if isinstance(exc, ModelTimeoutError) and not use_cached_on_timeout:
-                    errors.append(str(exc))
-                else:
-                    errors.append(f"{message.message_id}: {exc}")
+                stage_errors.append(str(exc))
                 fallback_output = self._fallback_stage_output(fallback, stage)
                 stage_outputs[stage] = fallback_output
                 trace_steps.append(
@@ -138,6 +203,14 @@ class TriageOrchestrator:
                     )
                 )
 
+        errors: list[str] = []
+        if stage_errors:
+            unique_errors = list(dict.fromkeys(stage_errors))
+            if isinstance(unique_errors[0], str) and len(unique_errors) == 1:
+                errors.append(f"{message.message_id}: {unique_errors[0]}")
+            else:
+                errors.append(f"{message.message_id}: {'; '.join(unique_errors)}")
+
         result = self._merge_outputs(message, fallback, stage_outputs, trace_steps)
         trace_record = TraceRecord(
             message_id=result.message_id,
@@ -150,6 +223,42 @@ class TriageOrchestrator:
             unsubscribe_recommended=result.unsubscribe_candidate,
         )
         return result, trace_record, fallback_used, errors
+
+    def _triage_message_with_fallback(
+        self,
+        message: FixtureMessage,
+        *,
+        availability_error: str,
+    ) -> tuple[MessageResult, TraceRecord]:
+        fallback = triage_message(message)
+        trace_steps = [
+            TraceStep(
+                agent_name=stage,
+                output=self._fallback_stage_output(fallback, stage),
+                confidence=fallback.confidence,
+                latency_ms=0,
+                fallback_used=True,
+                error=availability_error if stage == AgentStage.CLASSIFY else None,
+            )
+            for stage in AgentStage
+        ]
+        result = self._merge_outputs(
+            message,
+            fallback,
+            {stage: self._fallback_stage_output(fallback, stage) for stage in AgentStage},
+            trace_steps,
+        )
+        trace_record = TraceRecord(
+            message_id=result.message_id,
+            sender=result.sender,
+            subject=result.subject,
+            agent_steps=trace_steps,
+            priority_score=result.priority_score,
+            score_rationale=result.score_rationale,
+            final_lane=result.final_lane,
+            unsubscribe_recommended=result.unsubscribe_candidate,
+        )
+        return result, trace_record
 
     def _merge_outputs(
         self,

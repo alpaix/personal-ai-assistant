@@ -23,6 +23,8 @@ tasks:
 
   ui:
     desc: Run the Chainlit UI locally
+    dotenv:
+      - .env
     cmds:
       - uv run chainlit run briefbox/chainlit_app.py --port 8001 --headless
 

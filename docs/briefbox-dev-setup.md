@@ -7,6 +7,14 @@
 - Ollama installed locally
 - A local Ollama model available for later milestones
 
+Recommended local model:
+
+```bash
+ollama pull qwen3.5:0.8b
+```
+
+If you want to use a different local model, set `BRIEFBOX_OLLAMA_MODEL`.
+
 ## Install And Sync
 
 ```bash

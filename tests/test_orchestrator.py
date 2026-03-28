@@ -39,6 +39,11 @@ class FakeModelClient:
         return StageResult(output=outputs[stage], latency_ms=12)
 
 
+class UnavailableModelClient(FakeModelClient):
+    def check_model_availability(self) -> str:
+        return "Ollama at http://127.0.0.1:11434 is unavailable"
+
+
 def test_process_run_completes_with_model_outputs() -> None:
     store = InMemoryRunStore()
     orchestrator = TriageOrchestrator(store=store, model_client=FakeModelClient(), batch_size=10)
@@ -53,7 +58,7 @@ def test_process_run_completes_with_model_outputs() -> None:
     assert result.trace[0].agent_steps[0].agent_name == "classify"
 
 
-def test_process_run_marks_partial_when_model_falls_back() -> None:
+def test_process_run_completes_when_model_falls_back() -> None:
     store = InMemoryRunStore()
     orchestrator = TriageOrchestrator(
         store=store,
@@ -66,7 +71,7 @@ def test_process_run_marks_partial_when_model_falls_back() -> None:
 
     status = store.get_status(run.run_id)
     result = store.get_result(run.run_id)
-    assert status.status == "partial"
+    assert status.status == "completed"
     assert result.fallback_used is True
     assert result.errors
     assert result.trace[0].agent_steps[0].fallback_used is True
@@ -94,3 +99,19 @@ def test_process_run_fails_for_missing_fixture() -> None:
     status = store.get_status(run.run_id)
     assert status.status == "failed"
     assert "was not found" in status.errors[0]
+
+
+def test_process_run_completes_with_fallback_when_model_is_unavailable() -> None:
+    store = InMemoryRunStore()
+    orchestrator = TriageOrchestrator(store=store, model_client=UnavailableModelClient())
+    run = store.create_run("valid-fixture")
+
+    orchestrator.process_run(run.run_id, fixture_id="valid-fixture")
+
+    status = store.get_status(run.run_id)
+    result = store.get_result(run.run_id)
+    assert status.status == "completed"
+    assert result.fallback_used is True
+    assert result.summary_stats.messages == 2
+    assert result.errors == ["Ollama at http://127.0.0.1:11434 is unavailable"]
+    assert result.trace[0].agent_steps[0].error == "Ollama at http://127.0.0.1:11434 is unavailable"
